@@ -189,16 +189,16 @@ function AppContent() {
             <Text style={authStyles.title}>{isSignup ? 'Create Account' : 'Welcome back'}</Text>
             {isSignup ? (
               <View>
-                <InputField icon="person-outline" label="Full name" value={signupData.name} onChangeText={(t) => setSignupData(p=>({...p, name: t}))} />
-                <InputField icon="mail-outline" label="Email" value={signupData.email} onChangeText={(t) => setSignupData(p=>({...p, email: t}))} />
-                <InputField icon="lock-closed-outline" label="Password" value={signupData.password} onChangeText={(t) => setSignupData(p=>({...p, password: t}))} secure />
-                <InputField icon="shield-checkmark-outline" label="Confirm" value={signupData.confirmPassword} onChangeText={(t) => setSignupData(p=>({...p, confirmPassword: t}))} secure />
+                <InputField icon="person-outline" label="Full name" placeholder="Enter your full name" value={signupData.name} onChangeText={(t) => setSignupData(p=>({...p, name: t}))} />
+                <InputField icon="mail-outline" label="Email" placeholder="Enter your email" value={signupData.email} onChangeText={(t) => setSignupData(p=>({...p, email: t}))} />
+                <InputField icon="lock-closed-outline" label="Password" placeholder="Create password" value={signupData.password} onChangeText={(t) => setSignupData(p=>({...p, password: t}))} secure />
+                <InputField icon="shield-checkmark-outline" label="Confirm" placeholder="Confirm password" value={signupData.confirmPassword} onChangeText={(t) => setSignupData(p=>({...p, confirmPassword: t}))} secure />
                 <PrimaryButtonThemed label="Create Account" onPress={onSignup} loading={loading} />
               </View>
             ) : (
               <View>
-                <InputField icon="mail-outline" label="Email" value={loginData.email} onChangeText={(t) => setLoginData(p=>({...p, email: t}))} />
-                <InputField icon="lock-closed-outline" label="Password" value={loginData.password} onChangeText={(t) => setLoginData(p=>({...p, password: t}))} secure />
+                <InputField icon="mail-outline" label="Email" placeholder="Enter your email" value={loginData.email} onChangeText={(t) => setLoginData(p=>({...p, email: t}))} />
+                <InputField icon="lock-closed-outline" label="Password" placeholder="Enter your password" value={loginData.password} onChangeText={(t) => setLoginData(p=>({...p, password: t}))} secure />
                 <PrimaryButtonThemed label="Sign In" onPress={onLogin} loading={loading} />
               </View>
             )}

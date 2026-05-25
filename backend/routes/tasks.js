@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth'); // Uses the middleware above
 const Task = require('../models/Task');
-const { recordTaskCompleted, recordTaskDeleted } = require('../utils/analyticsStore');
+const { recordTaskCompleted, recordTaskUncompleted, recordTaskDeleted } = require('../utils/analyticsStore');
 const { addArchiveExpiry, runArchiveCleanup } = require('../utils/archiveRetention');
 
 const PRIORITIES = ['High', 'Medium', 'Low'];
@@ -104,6 +104,7 @@ router.patch('/:id', auth, async (req, res) => {
     }
 
     const wasDone = task.done === true;
+    const previousCompletedAt = task.completedAt;
 
     // 3. Apply updates (completing a task moves it to archive)
     const updates = { ...req.body };
@@ -131,6 +132,9 @@ router.patch('/:id', auth, async (req, res) => {
 
     if (!wasDone && task.done === true) {
       await recordTaskCompleted(req.user.id, task.completedAt);
+    }
+    if (wasDone && task.done !== true) {
+      await recordTaskUncompleted(req.user.id, previousCompletedAt);
     }
 
     res.json(task);

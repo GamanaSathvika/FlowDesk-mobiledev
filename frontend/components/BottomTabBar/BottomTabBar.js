@@ -57,7 +57,7 @@ function TabItem({ tab, isActive, onPress, styles, theme }) {
         <Ionicons
           name={isActive ? tab.iconActive : tab.icon}
           size={23}
-          color={isActive ? theme.primary : theme.textTertiary}
+          color={isActive ? (theme.tabActiveForeground || theme.primary) : theme.textTertiary}
         />
         <Text style={[styles.label, isActive && styles.labelActive]}>
           {tab.label}
@@ -116,19 +116,35 @@ function createTabStyles(t) {
       gap: 3,
       overflow: 'visible',
     },
-    tabHighlightBg: {
-      ...StyleSheet.absoluteFillObject,
-      backgroundColor: t.primarySoft,
-      borderRadius: 20,
-      borderWidth: StyleSheet.hairlineWidth,
-      borderColor: t.primarySoftBorder,
-      shadowColor: isDark ? t.primary : t.shadow,
-      shadowOffset: { width: 0, height: 2 },
-      shadowRadius: isDark ? 10 : 6,
-      shadowOpacity: isDark ? 0.15 : 0.06,
-      elevation: isDark ? 4 : 2,
-    },
+    tabHighlightBg: isDark
+      ? {
+          ...StyleSheet.absoluteFillObject,
+          backgroundColor: t.tabActiveBackground,
+          borderRadius: 22,
+          borderWidth: 1,
+          borderColor: t.tabActiveBorder,
+          shadowColor: '#000000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowRadius: 4,
+          shadowOpacity: 0.08,
+          elevation: 2,
+        }
+      : {
+          ...StyleSheet.absoluteFillObject,
+          backgroundColor: t.primarySoft,
+          borderRadius: 20,
+          borderWidth: StyleSheet.hairlineWidth,
+          borderColor: t.primarySoftBorder,
+          shadowColor: t.shadow,
+          shadowOffset: { width: 0, height: 2 },
+          shadowRadius: 6,
+          shadowOpacity: 0.06,
+          elevation: 2,
+        },
     label: { fontSize: 11, fontWeight: '500', color: t.textTertiary, letterSpacing: 0.1 },
-    labelActive: { color: t.primary, fontWeight: '700' },
+    labelActive: {
+      color: isDark ? (t.tabActiveForeground || t.primary) : t.primary,
+      fontWeight: '700',
+    },
   });
 }

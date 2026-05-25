@@ -65,6 +65,27 @@ function upsertWeeklyStat(analytics, date) {
   entry.completed = (entry.completed || 0) + 1;
 }
 
+function decrementDailyStat(analytics, date, field) {
+  ensureAnalyticsDefaults(analytics);
+  const stats = analytics.dailyCompletedStats;
+  const day = startOfDay(date).getTime();
+  const entry = stats.find(s => startOfDay(s.date).getTime() === day);
+  if (!entry) return;
+  entry[field] = Math.max(0, (entry[field] || 0) - 1);
+  analytics.dailyStats = stats;
+}
+
+function decrementWeeklyStat(analytics, date) {
+  ensureAnalyticsDefaults(analytics);
+  const weekStart = getWeekStart(date);
+  const weekKey = weekStart.getTime();
+  const entry = analytics.weeklyCompletedStats.find(
+    s => getWeekStart(s.weekStart).getTime() === weekKey
+  );
+  if (!entry) return;
+  entry.completed = Math.max(0, (entry.completed || 0) - 1);
+}
+
 async function seedFromExistingTasks(userId, analytics) {
   ensureAnalyticsDefaults(analytics);
 
@@ -137,9 +158,24 @@ async function recordTaskDeleted(userId, deletedAt = new Date()) {
   return analytics;
 }
 
+async function recordTaskUncompleted(userId, completedAt = new Date()) {
+  const analytics = await getOrCreateAnalytics(userId);
+  analytics.totalCompletedCount = Math.max(0, (analytics.totalCompletedCount || 0) - 1);
+  analytics.completedTasksCount = analytics.totalCompletedCount;
+  analytics.totalCompletedHistory = analytics.totalCompletedCount;
+  const at = completedAt ? new Date(completedAt) : new Date();
+  if (!Number.isNaN(at.getTime())) {
+    decrementDailyStat(analytics, at, 'completed');
+    decrementWeeklyStat(analytics, at);
+  }
+  await analytics.save();
+  return analytics;
+}
+
 module.exports = {
   getOrCreateAnalytics,
   recordTaskCompleted,
+  recordTaskUncompleted,
   recordTaskDeleted,
   normalizeAnalyticsDoc,
   ensureAnalyticsDefaults,

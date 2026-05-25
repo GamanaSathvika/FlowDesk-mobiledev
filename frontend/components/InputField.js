@@ -1,11 +1,12 @@
-import React, { forwardRef, useMemo } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import React, { forwardRef, useMemo, useState } from 'react';
+import { View, Text, TextInput, StyleSheet, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../theme/ThemeProvider';
 
 const InputField = forwardRef((props, ref) => {
   const { theme } = useTheme();
   const styles = useMemo(() => createInputStyles(theme), [theme]);
+  const [showPassword, setShowPassword] = useState(false);
   const {
     icon,
     label,
@@ -37,7 +38,7 @@ const InputField = forwardRef((props, ref) => {
           onChangeText={onChangeText}
           placeholder={placeholder}
           placeholderTextColor={theme.textTertiary}
-          secureTextEntry={secure}
+          secureTextEntry={secure && !showPassword}
           keyboardType={keyboardType}
           textContentType={textContentType}
           autoComplete={autoComplete}
@@ -48,6 +49,21 @@ const InputField = forwardRef((props, ref) => {
           onSubmitEditing={onSubmitEditing}
           {...rest}
         />
+        {secure ? (
+          <Pressable
+            onPress={() => setShowPassword((prev) => !prev)}
+            hitSlop={8}
+            style={styles.toggle}
+            accessibilityRole="button"
+            accessibilityLabel={showPassword ? 'Hide password' : 'Show password'}
+          >
+            <Ionicons
+              name={showPassword ? 'eye-off-outline' : 'eye-outline'}
+              size={20}
+              color={theme.textSecondary}
+            />
+          </Pressable>
+        ) : null}
       </View>
     </View>
   );
@@ -71,5 +87,6 @@ function createInputStyles(t) {
     },
     icon: { marginRight: 12 },
     input: { flex: 1, color: t.textPrimary, fontSize: 16, paddingVertical: 12 },
+    toggle: { marginLeft: 8, padding: 4, justifyContent: 'center', alignItems: 'center' },
   });
 }

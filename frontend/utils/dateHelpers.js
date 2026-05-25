@@ -77,8 +77,16 @@ export function formatDueDate(dueDate) {
   return `Due ${formatted}`;
 }
 
+export function isDueTodayTask(task) {
+  return Boolean(task.dueAt && isDueToday(task.dueAt));
+}
+
 export function isTaskInTodaysSection(task) {
   if (task.done || task.archived) return false;
-  if (!task.dueAt) return true;
-  return isDueToday(task.dueAt);
+  return isDueTodayTask(task);
+}
+
+/** Archived or active — counts toward today's progress if due today. */
+export function isTaskInTodaysProgress(task) {
+  return isDueTodayTask(task);
 }

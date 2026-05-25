@@ -14,7 +14,7 @@ import Svg, { Circle } from 'react-native-svg';
 import { tasksApi } from '../../api/tasks';
 import { useTheme } from '../../theme/ThemeProvider';
 import { createHomeStyles } from '../../theme/homeStyles';
-import { formatDueDate, isTaskInTodaysSection } from '../../utils/dateHelpers';
+import { formatDueDate, isTaskInTodaysSection, isTaskInTodaysProgress } from '../../utils/dateHelpers';
 
 function ProgressRing({ pct = 0, size = 88, stroke = 7, theme, styles }) {
   const r = (size - stroke) / 2;
@@ -84,40 +84,55 @@ export default function HomeLandingScreen({ profile, onNavigate }) {
   const { theme } = useTheme();
   const s = useMemo(() => createHomeStyles(theme), [theme]);
   const [tasks, setTasks] = useState([]);
+  const [archivedTasks, setArchivedTasks] = useState([]);
   const [focusStats, setFocusStats] = useState({ totalSecondsToday: 0, sessionCount: 0 });
 
-  const todaysTasks = useMemo(
+  const pendingTodayTasks = useMemo(
     () => tasks.filter(isTaskInTodaysSection),
     [tasks],
   );
 
-  const doneCount = useMemo(() => todaysTasks.filter(t => t.done).length, [todaysTasks]);
+  const archivedCompletedToday = useMemo(
+    () => archivedTasks.filter((t) => t.done && isTaskInTodaysProgress(t)),
+    [archivedTasks],
+  );
+
+  const progressTotal = pendingTodayTasks.length + archivedCompletedToday.length;
+  const progressDone = archivedCompletedToday.length;
+  const hasDueTodayTasks = progressTotal > 0;
   const pct = useMemo(() => {
-    if (!todaysTasks.length) return 0;
-    return Math.round((doneCount / todaysTasks.length) * 100);
-  }, [doneCount, todaysTasks.length]);
+    if (!hasDueTodayTasks) return 0;
+    return Math.round((progressDone / progressTotal) * 100);
+  }, [progressDone, progressTotal, hasDueTodayTasks]);
 
   const pendingToday = useMemo(
-    () => todaysTasks.filter(t => !t.done).slice(0, 3),
-    [todaysTasks],
+    () => pendingTodayTasks.slice(0, 3),
+    [pendingTodayTasks],
   );
 
   const toggleTask = async (id) => {
     const task = tasks.find(t => t.id === id);
     try {
       const updated = await tasksApi.updateTask(id, { done: !task.done });
-      setTasks(prev => prev.map(t => t.id === id ? updated : t));
+      if (updated.archived && updated.done) {
+        setTasks((prev) => prev.filter((t) => t.id !== id));
+        setArchivedTasks((prev) => [updated, ...prev.filter((t) => t.id !== id)]);
+      } else {
+        setTasks((prev) => prev.map((t) => (t.id === id ? updated : t)));
+      }
     } catch (err) { console.error(err); }
   };
 
   const refreshData = useCallback(async () => {
   try {
-    const [taskData, stats] = await Promise.all([
+    const [taskData, archivedData, stats] = await Promise.all([
       tasksApi.getTasks(),
-      tasksApi.getFocusStats() 
+      tasksApi.getArchivedTasks(),
+      tasksApi.getFocusStats(),
     ]);
-    
+
     setTasks(taskData || []);
+    setArchivedTasks(archivedData || []);
     
     // Explicitly update state
     if (stats) {
@@ -167,11 +182,15 @@ useEffect(() => { refreshData(); }, [refreshData]);
           <ProgressRing pct={pct} size={88} stroke={7} theme={theme} styles={s} />
           <View style={s.progressInfo}>
             <Text style={s.progressEyebrow}>TODAY'S PROGRESS</Text>
-            <Text style={s.progressHeading}>{doneCount} of {todaysTasks.length} tasks</Text>
-            <View style={s.progressBarRow}>
-               <View style={s.progressBarBg}><View style={[s.progressBarFill, { width: `${pct}%` }]} /></View>
-               <Text style={s.progressBarPct}>{pct}%</Text>
-            </View>
+            <Text style={s.progressHeading}>
+              {hasDueTodayTasks ? `${progressDone} of ${progressTotal} tasks` : 'No tasks due today'}
+            </Text>
+            {hasDueTodayTasks ? (
+              <View style={s.progressBarRow}>
+                <View style={s.progressBarBg}><View style={[s.progressBarFill, { width: `${pct}%` }]} /></View>
+                <Text style={s.progressBarPct}>{pct}%</Text>
+              </View>
+            ) : null}
           </View>
         </View>
 
@@ -185,7 +204,7 @@ useEffect(() => { refreshData(); }, [refreshData]);
         ) : (
           <View style={s.tasksEmpty}>
             <Text style={s.tasksEmptyTitle}>🎉 All tasks are done!</Text>
-            <Text style={s.tasksEmptySub}>No tasks due today. Great work.</Text>
+            <Text style={s.tasksEmptySub}>No tasks due today.</Text>
           </View>
         )}
 
