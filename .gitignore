@@ -1,0 +1,5 @@
+node_modules/
+local_config.yml
+.ngrok.exe.old
+flodesk.txt
+.gitignore.txt

@@ -1,0 +1,33 @@
+export const colors = {
+  white: '#FFFFFF',
+  black: '#000000',
+  slate900: '#0F172A',
+  gray900: '#111827',
+  gray700: '#374151',
+  gray500: '#6B7280',
+  gray400: '#9CA3AF',
+  gray300: '#D1D5DB',
+  gray200: '#E5E7EB',
+  gray100: '#F3F4F6',
+  blue600: '#2563EB',
+  blue500: '#3B82F6',
+  blue200: '#BFDBFE',
+  blue100: '#DBEAFE',
+  blue50: '#EFF6FF',
+  indigo100: '#E0E7FF',
+  slate500: '#64748B',
+  slate600: '#475569',
+  sky50: '#F6F8FC',
+  sky100: '#E8F0FF',
+  danger600: '#DC2626',
+};
+
+export const spacing = {
+  xs: 4,
+  sm: 8,
+  md: 12,
+  lg: 16,
+  xl: 20,
+  '2xl': 24,
+  '3xl': 28,
+};
