@@ -1,131 +1,217 @@
-<<<<<<< HEAD
-# 🚀 FlowDesk
+# FlowDesk
 
-A modern productivity mobile app designed to help users manage tasks, stay focused, and track progress — all in one clean and minimal interface.
+![React Native](https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Expo](https://img.shields.io/badge/Expo-000020?style=for-the-badge&logo=expo&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white)
+![Express](https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
 
----
+**Smart productivity and task management application designed to help users organize work, stay focused, and track progress.**
 
-## ✨ Features
-
-### 🏠 Dashboard (Home Page)
-
-* Overview of daily productivity
-* Today's tasks preview
-* Task completion tracking
-* Focus time summary
-* Weekly progress insights
+FlowDesk is a full-stack mobile productivity app that combines task management, Pomodoro focus sessions, analytics, and a polished dark-mode UI—built with React Native (Expo) and a Node.js REST API backed by MongoDB.
 
 ---
 
-### 📋 Tasks Management
+## Features
 
-* Add, edit, and delete tasks
-* Mark tasks as completed/pending
-* Filter tasks (All, Pending, Completed, High Priority)
-* Clean and interactive task UI
+### Task Management
 
----
+- Create, edit, and delete tasks
+- Mark tasks complete with archive workflow
+- Auto archive cleanup (7-day retention)
+- Priorities: **High**, **Medium**, **Low**
+- Category tags (College, Personal, Work, and custom)
+- Search and filter tasks
+- Due dates with smart display (today, tomorrow, overdue)
 
-### ⏱️ Focus Mode (Pomodoro)
+### Focus
 
-* Start and manage focus sessions
-* Timer-based productivity system
-* Track daily focus time
-* Helps improve concentration
+- Pomodoro-style focus timer
+- Session tracking and daily focus stats
+- Integrated with dashboard progress
 
----
+### Analytics
 
-### 📊 Analytics
+- Productivity statistics and completion tracking
+- Historical analytics persistence
+- Progress monitoring and insights
 
-* Weekly productivity tracking
-* Task completion insights
-* Focus time statistics
-* Visual progress representation
+### UI
 
----
+- Dark mode and light mode
+- Theme Provider with AsyncStorage persistence
+- Responsive, card-based design system
+- Modern bottom navigation and screen polish
 
-### ⚙️ Profile & Settings
+### Settings
 
-* Editable profile (name & avatar)
-* Add email or phone (at least one required)
-* App preferences:
-
-  * Notifications
-  * Dark mode (optional)
-  * Focus settings
-
----
-
-## 🧠 Tech Stack
-
-* **React Native**
-* **Expo**
-* **React Navigation**
-* **JavaScript (ES6+)**
+- Profile management (name, email, phone, bio, organization)
+- Theme preference saved locally and synced with profile
+- App preferences and account controls
 
 ---
 
-## 🎯 Project Goals
+## Screenshots
 
-* Build a clean and minimal productivity app
-* Practice UI/UX design principles
-* Implement real-world app features
-* Learn state management and navigation
+> Add your screenshots under `docs/screenshots/` and replace the placeholders below.
 
----
+| Dashboard | Tasks |
+|:---:|:---:|
+| ![Dashboard](docs/screenshots/dashboard.png) | ![Tasks](docs/screenshots/tasks.png) |
 
-## 📱 App Structure
+| Focus | Analytics |
+|:---:|:---:|
+| ![Focus](docs/screenshots/focus.png) | ![Analytics](docs/screenshots/analytics.png) |
 
-* Home (Dashboard)
-* Tasks Screen
-* Focus Screen
-* Analytics Screen
-* Settings/Profile Screen
-
----
-
-## 🔥 Highlights
-
-* Clean, modern UI inspired by Notion & Linear
-* Smooth navigation across screens
-* Interactive task handling (real-time updates)
-* Focus-based productivity system
+| Dark Mode |
+|:---:|
+| ![Dark Mode](docs/screenshots/dark-mode.png) |
 
 ---
 
-## 🚧 Future Improvements
+## Tech Stack
 
-* Backend integration (Firebase / API)
-* User authentication
-* Data persistence
-* Advanced analytics
-* Notifications & reminders
+| Layer | Technologies |
+| --- | --- |
+| **Frontend** | React Native, Expo, AsyncStorage, Axios, React Native SVG |
+| **Backend** | Node.js, Express.js, JWT, bcryptjs, CORS |
+| **Database** | MongoDB, Mongoose |
+| **Tools** | REST APIs, Theme Provider, dotenv, Expo Vector Icons |
 
 ---
 
-## 💡 Getting Started
+## Architecture
 
-1. Clone the repository
-2. Install dependencies:
+```text
+React Native Frontend (Expo)
+            │
+            ▼
+       REST APIs (JWT)
+            │
+            ▼
+   Express.js Backend
+            │
+            ▼
+         MongoDB
+```
+
+**API overview**
+
+| Endpoint prefix | Purpose |
+| --- | --- |
+| `/api/auth` | Register, login, JWT tokens |
+| `/api/tasks` | Task CRUD, archive, search |
+| `/api/focus` | Focus session tracking |
+| `/api/analytics` | Productivity metrics |
+| `/api/users` | Profile and settings |
+
+---
+
+## Folder Structure
+
+```text
+FlowDesk/
+├── frontend/
+│   ├── api/                 # API clients (auth, tasks, user, analytics)
+│   ├── components/          # Reusable UI (BottomTabBar, InputField, …)
+│   ├── screens/
+│   │   ├── main/            # Home, Tasks, Focus, Analytics, Settings
+│   │   └── LoginScreen.js
+│   ├── theme/               # Light/dark themes, ThemeProvider, screen styles
+│   ├── utils/               # taskForm, dateHelpers
+│   └── App.js
+│
+└── backend/
+    ├── controllers/         # User, analytics logic
+    ├── jobs/                # Archive cleanup scheduler
+    ├── middleware/          # JWT auth
+    ├── models/              # Task, User, Analytics, FocusSession
+    ├── routes/              # auth, tasks, focus, analytics, user
+    ├── utils/               # analyticsStore, archiveRetention
+    └── server.js
+```
+
+---
+
+## Installation
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) (v18+ recommended)
+- [MongoDB](https://www.mongodb.com/) (local or Atlas)
+- [Expo CLI](https://docs.expo.dev/) / Expo Go on a device or emulator
+
+### 1. Clone the repository
 
 ```bash
+git clone https://github.com/<your-username>/FlowDesk.git
+cd FlowDesk
+```
+
+### 2. Backend setup
+
+```bash
+cd backend
 npm install
 ```
 
-3. Start the app:
+Create a `.env` file in `backend/` (see [Environment Variables](#environment-variables)), then start the server:
 
 ```bash
+npm run dev
+```
+
+The API runs at `http://localhost:4000` by default.
+
+### 3. Frontend setup
+
+Open a new terminal:
+
+```bash
+cd frontend
+npm install
 npx expo start
 ```
 
----
+Scan the QR code with **Expo Go** (Android/iOS) or press `i` / `a` for simulators.
 
-## ⭐ Final Note
-
-FlowDesk is built as a step towards creating a real-world productivity tool — focusing on simplicity, functionality, and clean design.
+> **Note:** Update the API base URL in `frontend/api/client.js` (and related API modules) to match your machine IP or tunnel URL when testing on a physical device.
 
 ---
-=======
-# FlowDesk
-Mobile Application
->>>>>>> 0501214767b43f811976d06c08a3e7dddf4cef4a
+
+## Environment Variables
+
+Create `backend/.env`:
+
+```env
+MONGO_URI=mongodb://127.0.0.1:27017/flowdesk
+JWT_SECRET=your_jwt_secret_here
+PORT=4000
+```
+
+| Variable | Description |
+| --- | --- |
+| `MONGO_URI` | MongoDB connection string |
+| `JWT_SECRET` | Secret for signing authentication tokens |
+| `PORT` | Express server port (default: `4000`) |
+
+Never commit real secrets to version control.
+
+---
+
+## Future Improvements
+
+- Push notifications and reminders
+- Calendar integration
+- AI-powered productivity suggestions
+- Multi-device cloud sync
+
+---
+
+## Contributors
+
+**Gamana Sathvika**
+
+---
+
+Built with focus on productivity, consistency, and modern user experience.
