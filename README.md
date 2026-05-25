@@ -6,9 +6,11 @@
 ![Express](https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
 
-**Smart productivity and task management application designed to help users organize work, stay focused, and track progress.**
+> **Full Stack Productivity & Task Management App**
 
-FlowDesk is a full-stack mobile productivity app that combines task management, Pomodoro focus sessions, analytics, and a polished dark-mode UI—built with React Native (Expo) and a Node.js REST API backed by MongoDB.
+Smart productivity and task management application designed to help users organize work, stay focused, and track progress.
+
+FlowDesk delivers task planning, Pomodoro focus sessions, analytics, and profile settings in one mobile experience—powered by **React Native (Expo)** on the client and a **Node.js / Express** REST API with **MongoDB**.
 
 ---
 
@@ -16,91 +18,71 @@ FlowDesk is a full-stack mobile productivity app that combines task management, 
 
 ### Task Management
 
-- Create, edit, and delete tasks
-- Mark tasks complete with archive workflow
-- Auto archive cleanup (7-day retention)
-- Priorities: **High**, **Medium**, **Low**
-- Category tags (College, Personal, Work, and custom)
-- Search and filter tasks
-- Due dates with smart display (today, tomorrow, overdue)
+- Create tasks
+- Edit tasks
+- Delete tasks
+- Archive completed tasks
+- Auto archive cleanup (7 days)
+- Task priorities (High / Medium / Low)
+- Tags
+- Search tasks
+- Due date support
 
 ### Focus
 
-- Pomodoro-style focus timer
-- Session tracking and daily focus stats
-- Integrated with dashboard progress
+- Pomodoro focus timer
+- Session tracking
 
 ### Analytics
 
-- Productivity statistics and completion tracking
-- Historical analytics persistence
-- Progress monitoring and insights
+- Productivity statistics
+- Completion tracking
+- Historical analytics
+- Progress monitoring
 
 ### UI
 
-- Dark mode and light mode
-- Theme Provider with AsyncStorage persistence
-- Responsive, card-based design system
-- Modern bottom navigation and screen polish
+- Dark mode
+- Responsive UI
+- Modern design system
 
 ### Settings
 
-- Profile management (name, email, phone, bio, organization)
-- Theme preference saved locally and synced with profile
-- App preferences and account controls
-
----
-
-## Screenshots
-
-> Add your screenshots under `docs/screenshots/` and replace the placeholders below.
-
-| Dashboard | Tasks |
-|:---:|:---:|
-| ![Dashboard](docs/screenshots/dashboard.png) | ![Tasks](docs/screenshots/tasks.png) |
-
-| Focus | Analytics |
-|:---:|:---:|
-| ![Focus](docs/screenshots/focus.png) | ![Analytics](docs/screenshots/analytics.png) |
-
-| Dark Mode |
-|:---:|
-| ![Dark Mode](docs/screenshots/dark-mode.png) |
+- Profile management
+- Theme persistence
 
 ---
 
 ## Tech Stack
 
-| Layer | Technologies |
-| --- | --- |
-| **Frontend** | React Native, Expo, AsyncStorage, Axios, React Native SVG |
-| **Backend** | Node.js, Express.js, JWT, bcryptjs, CORS |
-| **Database** | MongoDB, Mongoose |
-| **Tools** | REST APIs, Theme Provider, dotenv, Expo Vector Icons |
+| Frontend | Backend | Database | Tools |
+| --- | --- | --- | --- |
+| React Native | Node.js | MongoDB | REST APIs |
+| Expo | Express.js | Mongoose | AsyncStorage |
+| Axios | JWT Authentication | — | Theme Provider |
+| React Native SVG | bcryptjs, CORS | — | Dark Mode System |
 
 ---
 
 ## Architecture
 
 ```text
-React Native Frontend (Expo)
-            │
-            ▼
-       REST APIs (JWT)
-            │
-            ▼
-   Express.js Backend
-            │
-            ▼
-         MongoDB
+React Native Frontend
+         │
+         ▼
+      REST APIs
+         │
+         ▼
+   Express Backend
+         │
+         ▼
+       MongoDB
 ```
 
-**API overview**
-
-| Endpoint prefix | Purpose |
+| Route | Description |
 | --- | --- |
-| `/api/auth` | Register, login, JWT tokens |
-| `/api/tasks` | Task CRUD, archive, search |
+| `/api/auth` | User registration and login |
+| `/api/tasks` | Task CRUD, archive, and search |
 | `/api/focus` | Focus session tracking |
 | `/api/analytics` | Productivity metrics |
 | `/api/users` | Profile and settings |
@@ -112,23 +94,19 @@ React Native Frontend (Expo)
 ```text
 FlowDesk/
 ├── frontend/
-│   ├── api/                 # API clients (auth, tasks, user, analytics)
-│   ├── components/          # Reusable UI (BottomTabBar, InputField, …)
+│   ├── api/
 │   ├── screens/
-│   │   ├── main/            # Home, Tasks, Focus, Analytics, Settings
-│   │   └── LoginScreen.js
-│   ├── theme/               # Light/dark themes, ThemeProvider, screen styles
-│   ├── utils/               # taskForm, dateHelpers
-│   └── App.js
+│   ├── components/
+│   ├── theme/
+│   └── utils/
 │
 └── backend/
-    ├── controllers/         # User, analytics logic
-    ├── jobs/                # Archive cleanup scheduler
-    ├── middleware/          # JWT auth
-    ├── models/              # Task, User, Analytics, FocusSession
-    ├── routes/              # auth, tasks, focus, analytics, user
-    ├── utils/               # analyticsStore, archiveRetention
-    └── server.js
+    ├── models/
+    ├── routes/
+    ├── controllers/
+    ├── middleware/
+    ├── jobs/
+    └── utils/
 ```
 
 ---
@@ -137,35 +115,35 @@ FlowDesk/
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) (v18+ recommended)
-- [MongoDB](https://www.mongodb.com/) (local or Atlas)
-- [Expo CLI](https://docs.expo.dev/) / Expo Go on a device or emulator
+- Node.js (v18+)
+- MongoDB (local instance or MongoDB Atlas)
+- Expo Go or an emulator/simulator
 
-### 1. Clone the repository
+### Clone repository
 
 ```bash
-git clone https://github.com/<your-username>/FlowDesk.git
+git clone https://github.com/GamanaSathvika/FlowDesk-mobiledev.git
 cd FlowDesk
 ```
 
-### 2. Backend setup
+### Backend
 
 ```bash
 cd backend
 npm install
 ```
 
-Create a `.env` file in `backend/` (see [Environment Variables](#environment-variables)), then start the server:
+Create `backend/.env` using the [environment variables](#environment-variables) below, then run:
 
 ```bash
 npm run dev
 ```
 
-The API runs at `http://localhost:4000` by default.
+Server default: `http://localhost:4000`
 
-### 3. Frontend setup
+### Frontend
 
-Open a new terminal:
+In a separate terminal:
 
 ```bash
 cd frontend
@@ -173,9 +151,9 @@ npm install
 npx expo start
 ```
 
-Scan the QR code with **Expo Go** (Android/iOS) or press `i` / `a` for simulators.
+Use Expo Go to scan the QR code, or run on iOS/Android simulator.
 
-> **Note:** Update the API base URL in `frontend/api/client.js` (and related API modules) to match your machine IP or tunnel URL when testing on a physical device.
+> Update the API base URL in `frontend/api/client.js` when testing on a physical device (use your LAN IP or tunnel URL).
 
 ---
 
@@ -184,33 +162,44 @@ Scan the QR code with **Expo Go** (Android/iOS) or press `i` / `a` for simulator
 Create `backend/.env`:
 
 ```env
-MONGO_URI=mongodb://127.0.0.1:27017/flowdesk
-JWT_SECRET=your_jwt_secret_here
-PORT=4000
+MONGO_URI=
+JWT_SECRET=
+PORT=
 ```
 
 | Variable | Description |
 | --- | --- |
 | `MONGO_URI` | MongoDB connection string |
-| `JWT_SECRET` | Secret for signing authentication tokens |
+| `JWT_SECRET` | Secret key for JWT token signing |
 | `PORT` | Express server port (default: `4000`) |
 
-Never commit real secrets to version control.
+Example:
+
+```env
+MONGO_URI=mongodb://127.0.0.1:27017/flowdesk
+JWT_SECRET=your_secure_secret
+PORT=4000
+```
+
+Do not commit production secrets to version control.
 
 ---
 
 ## Future Improvements
 
-- Push notifications and reminders
+- Notifications
 - Calendar integration
-- AI-powered productivity suggestions
-- Multi-device cloud sync
+- AI productivity suggestions
+- Cloud sync
 
 ---
 
 ## Contributors
 
-**Gamana Sathvika**
+- R Gamana Sathvika
+- Priya KC
+- Ruchitha B
+- Bhoomika
 
 ---
 
